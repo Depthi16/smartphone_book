@@ -1,0 +1,196 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+
+    height:100vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    background:
+    linear-gradient(135deg,#667eea,#764ba2);
+}
+
+
+/* CONTAINER */
+
+.auth-container{
+
+    width:100%;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+}
+
+
+/* BOX */
+
+.auth-box{
+
+    width:420px;
+
+    background:rgba(255,255,255,0.15);
+
+    backdrop-filter:blur(15px);
+
+    border-radius:30px;
+
+    padding:45px;
+
+    text-align:center;
+
+    box-shadow:0 10px 40px rgba(0,0,0,0.2);
+
+    border:1px solid rgba(255,255,255,0.2);
+
+    animation:fadeIn 0.7s ease;
+}
+
+
+/* LOGO */
+
+.logo{
+
+    font-size:80px;
+
+    margin-bottom:10px;
+}
+
+
+/* TITLE */
+
+.auth-box h1{
+
+    color:white;
+
+    font-size:38px;
+
+    margin-bottom:10px;
+}
+
+
+/* SUBTITLE */
+
+.subtitle{
+
+    color:#eee;
+
+    margin-bottom:30px;
+}
+
+
+/* INPUTS */
+
+.auth-box input{
+
+    width:100%;
+
+    padding:16px;
+
+    margin-bottom:18px;
+
+    border:none;
+
+    border-radius:14px;
+
+    outline:none;
+
+    font-size:15px;
+
+    background:rgba(255,255,255,0.9);
+}
+
+
+/* BUTTON */
+
+.auth-box button{
+
+    width:100%;
+
+    padding:16px;
+
+    border:none;
+
+    border-radius:14px;
+
+    background:
+    linear-gradient(45deg,#00c6ff,#0072ff);
+
+    color:white;
+
+    font-size:17px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:0.3s;
+}
+
+.auth-box button:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:0 6px 15px rgba(0,0,0,0.2);
+}
+
+
+/* TEXT */
+
+.bottom-text{
+
+    margin-top:20px;
+
+    color:white;
+}
+
+.bottom-text a{
+
+    color:#fff;
+
+    text-decoration:none;
+
+    font-weight:bold;
+}
+
+
+/* ANIMATION */
+
+@keyframes fadeIn{
+
+    from{
+
+        opacity:0;
+        transform:translateY(20px);
+    }
+
+    to{
+
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+
+/* MOBILE */
+
+@media(max-width:500px){
+
+    .auth-box{
+
+        width:90%;
+        padding:35px 25px;
+    }
+
+}

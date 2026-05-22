@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Smart Phonebook</title>
+
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>📱 Smart Phonebook</h1>
+
+        <div class="form">
+
+            <input type="text"
+            id="name"
+            placeholder="Enter Name">
+
+            <input type="text"
+            id="phone"
+            placeholder="Enter Phone Number">
+
+            <input type="email"
+            id="email"
+            placeholder="Enter Email">
+
+            <input type="text"
+            id="company"
+            placeholder="Enter Company">
+
+            <input type="text"
+            id="address"
+            placeholder="Enter Address">
+
+            <input type="text"
+            id="category"
+            placeholder="Enter Category">
+
+            <button onclick="addContact()">
+                ➕ Add Contact
+            </button>
+
+        </div>
+
+        <div class="top-bar">
+
+            <input type="text"
+            id="search"
+            placeholder="🔍 Search Contact">
+
+            <select id="sort">
+
+                <option value="">
+                    Sort Contacts
+                </option>
+
+                <option value="asc">
+                    Name A-Z
+                </option>
+
+                <option value="desc">
+                    Name Z-A
+                </option>
+
+            </select>
+
+        </div>
+
+        <div id="contacts"></div>
+
+    </div>
+
+    <script
+    src="{{ url_for('static', filename='script.js') }}">
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Smart Phonebook</title>
+
+    <link rel="stylesheet" href="/static/style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="main-layout">
+
+    <!-- SIDEBAR -->
+
+    <div class="sidebar">
+
+        <h1>📱 Smart Phonebook</h1>
+
+        <button onclick="toggleDarkMode()" class="dark-btn">
+            🌙 Dark Mode
+        </button>
+
+        <a href="/logout" class="logout-btn">
+            Logout
+        </a>
+
+        <div class="side-card">
+
+            <h3>🔍 Search Contacts</h3>
+
+            <input type="text"
+            id="search"
+            placeholder="Search Here">
+
+        </div>
+
+        <div class="side-card">
+
+            <h3>📂 Sort Contacts</h3>
+
+            <select id="sortSelect" onchange="sortTable()">
+
+                <option value="">
+                    Sort Contacts
+                </option>
+
+                <option value="az">
+                    Name A-Z
+                </option>
+
+                <option value="za">
+                    Name Z-A
+                </option>
+
+                <option value="favorite">
+                    Favorites First
+                </option>
+
+            </select>
+
+        </div>
+
+        <div class="side-card">
+
+            <h3>📊 Statistics</h3>
+
+            <p>Total Contacts: {{ contacts|length }}</p>
+
+        </div>
+
+    </div>
+
+    <!-- MAIN CONTENT -->
+
+    <div class="content">
+
+        <!-- ADD CONTACT -->
+
+        <div class="container">
+
+            <h2>Add Contact</h2>
+
+            <form action="/add_contact" method="POST">
+
+                <div class="form-grid">
+
+                    <input type="text"
+                    name="name"
+                    placeholder="👤 Full Name"
+                    required>
+
+                    <input type="text"
+                    name="phone"
+                    placeholder="📞 Phone Number"
+                    required>
+
+                    <input type="email"
+                    name="email"
+                    placeholder="📧 Email">
+
+                    <input type="text"
+                    name="company"
+                    placeholder="🏢 Company">
+
+                    <input type="text"
+                    name="address"
+                    placeholder="📍 Address">
+
+                    <input type="text"
+                    name="category"
+                    placeholder="🏷 Category">
+
+                </div>
+
+                <button type="submit" class="add-btn">
+                    ➕ Add Contact
+                </button>
+
+            </form>
+
+        </div>
+
+        <!-- SEARCH RESULTS -->
+
+        <div id="results"></div>
+
+        <!-- SAVED CONTACTS -->
+
+        <div class="container">
+
+            <h2>💾 Saved Contacts</h2>
+
+            <div class="table-container">
+
+                <table id="contactTable">
+
+                    <tr>
+
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Email</th>
+                        <th>Company</th>
+                        <th>Favorite</th>
+                        <th>Actions</th>
+
+                    </tr>
+
+                    {% if contacts|length == 0 %}
+
+                    <tr>
+
+                        <td colspan="6">
+
+                            No Contacts Yet 📭
+
+                        </td>
+
+                    </tr>
+
+                    {% endif %}
+
+                    {% for c in contacts %}
+
+                    <tr>
+
+                        <td>{{ c[1] }}</td>
+                        <td>{{ c[2] }}</td>
+                        <td>{{ c[3] }}</td>
+                        <td>{{ c[4] }}</td>
+
+                        <td>
+
+                            {% if c[7] %}
+                                ⭐
+                            {% else %}
+                                -
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            <a href="/favorite/{{ c[0] }}"
+                            class="action-btn favorite-btn">
+                                ⭐
+                            </a>
+
+                            <a href="/edit/{{ c[0] }}"
+                            class="action-btn edit-btn">
+                                ✏
+                            </a>
+
+                            <a href="/delete/{{ c[0] }}"
+                            class="action-btn delete-btn"
+                            onclick="return confirm('Delete this contact?')">
+                                🗑
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+/* SEARCH */
+
+let timer;
+
+document.getElementById("search")
+.addEventListener("keyup", function(){
+
+    clearTimeout(timer);
+
+    let query = this.value;
+
+    timer = setTimeout(() => {
+
+        fetch(`/search?query=${query}`)
+
+        .then(res => res.json())
+
+        .then(data => {
+
+            let html = "";
+
+            data.forEach(contact => {
+
+                html += `
+
+                <div class="card">
+
+                    <h3>${contact.name}</h3>
+
+                    <p>📞 ${contact.phone}</p>
+
+                    <p>📧 ${contact.email}</p>
+
+                    <p>🏢 ${contact.company}</p>
+
+                </div>
+
+                `;
+
+            });
+
+            document.getElementById("results")
+            .innerHTML = html;
+
+        });
+
+    }, 300);
+
+});
+
+
+/* DARK MODE */
+
+function toggleDarkMode(){
+
+    document.body.classList.toggle('dark');
+
+}
+
+
+/* SORT */
+
+function sortTable(){
+
+    let table = document.getElementById("contactTable");
+
+    let rows = Array.from(table.rows).slice(1);
+
+    let type = document.getElementById("sortSelect").value;
+
+    rows.sort((a,b)=>{
+
+        let nameA = a.cells[0].innerText.toLowerCase();
+        let nameB = b.cells[0].innerText.toLowerCase();
+
+        let favA = a.cells[4].innerText.includes("⭐");
+        let favB = b.cells[4].innerText.includes("⭐");
+
+        if(type==="az"){
+
+            return nameA.localeCompare(nameB);
+
+        }
+
+        if(type==="za"){
+
+            return nameB.localeCompare(nameA);
+
+        }
+
+        if(type==="favorite"){
+
+            return favB - favA;
+
+        }
+
+    });
+
+    rows.forEach(row => table.appendChild(row));
+
+}
+
+</script>
+
+</body>
+</html>
